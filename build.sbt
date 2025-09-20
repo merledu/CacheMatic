@@ -1,24 +1,21 @@
 // See README.md for license details.
 
-ThisBuild / scalaVersion     := "2.13.16"
+ThisBuild / scalaVersion     := "2.13.10"
 ThisBuild / version          := "0.1.0"
 ThisBuild / organization     := "com.github.merledu"
 
-val chiselVersion = "7.0.0-RC1"
+val chiselVersion = "3.5.6"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "CacheMatic",
-    libraryDependencies ++= Seq(
-      "org.chipsalliance" %% "chisel" % chiselVersion,
-      "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-    ),
-    scalacOptions ++= Seq(
-      "-language:reflectiveCalls",
-      "-deprecation",
-      "-feature",
-      "-Xcheckinit",
-      "-Ymacro-annotations",
-    ),
-    addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full),
-  )
+name := "CacheMatic"
+libraryDependencies ++= Seq(
+  "edu.berkeley.cs" %% "chisel3" % chiselVersion,
+  "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+)
+scalacOptions ++= Seq(
+  "-language:reflectiveCalls",
+  "-deprecation",
+  "-feature",
+  "-Xcheckinit",
+  "-Ymacro-annotations",
+)
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % chiselVersion cross CrossVersion.full)
