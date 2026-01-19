@@ -1,0 +1,41 @@
+{
+  signal: [
+    {name: 'clock', wave: 'p.............'},
+    {name: 'state', wave: '2.2..2.22..22.', data: ['Idle','Access','Done','Idle','Access','Valid','Idle']},
+    {},
+    ['Input',
+      ['req',
+        {name: 'ready', wave: '1.0....10...1.'},
+        {name: 'valid', wave: '01...0.1...0..'},
+        ['bits',
+          {name: 'mmAddr', wave: 'x2...x.=...x..', data: ['waddr', 'raddr']},
+          {name: 'isWrite', wave: '01...0........'},
+          {name: 'blockIn', wave: 'x2...x........', data: ['aa bb']},
+        ]
+      ],
+      ['evict',
+        {name: 'ready', wave: '1.0....10...1.'},
+        {name: 'valid', wave: '01...0.1...0..'},
+        ['bits',
+          {name: 'idWay', wave: 'x2...x........', data: ['01']},
+        ]
+      ],
+    ],
+    {},
+    ['Output',
+      ['isHit',
+        {name: 'valid', wave: '0....1.0...10.'},
+        {name: 'ready', wave: '0.....10.1..0.'},
+        {name: 'bits', wave: 'x..........2x.', data: ['00 bb']},
+      ],
+      ['dataOut',
+        {name: 'valid', wave: '0....1.0...10.'},
+        {name: 'ready', wave: '0.....10.1..0.'},
+        {name: 'bits', wave: 'x..........2x.', data: ['00 bb']},
+      ]
+    ],
+  ],
+  head:{
+    text:'Parallel Compare Timings',
+  }
+}

@@ -6,9 +6,11 @@ ThisBuild / organization     := "com.github.merledu"
 
 val chiselVersion = "3.5.6"
 
-name := "CacheMatic"
+name := "cachematic"
+
 libraryDependencies ++= Seq(
   "edu.berkeley.cs" %% "chisel3" % chiselVersion,
+  "edu.berkeley.cs" %% "chiseltest" % "0.5.6" % "test",
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
   "edu.berkeley.cs" %% "chiseltest" % "0.5.6" % "test"
 )

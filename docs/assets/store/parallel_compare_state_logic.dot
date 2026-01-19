@@ -1,0 +1,109 @@
+digraph state_records {
+    rankdir=TB;
+    // nodesep=0.8;
+    // ranksep=1.2;
+
+	node [
+        shape=record,
+        style="filled",
+        fillcolor="#ECECFF",
+        color="#9370DB",
+        penwidth=2,
+        fontname="trebuchet ms",
+        fontsize=14,
+        fontcolor="#131300",
+        margin="0.1"
+    ];
+    
+    IDLE [label="{ IDLE |
+        in.req.ready := 1 \n
+        in.evict.ready := 1 \n
+        out.isHit.valid := 0 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 0 \n
+        dataStore.in.valid := 0 \n
+        tagStore.out.ready := 0 \n
+        dataStore.out.ready := 0
+    }"];
+    
+    READ [label="{ READ |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 0 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 1 \n
+        dataStore.in.valid := 1 \n
+        tagStore.out.ready := 0 \n
+        dataStore.out.ready := 0
+    }"];
+    
+    WRITE [label="{ WRITE |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 0 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 1 \n
+        dataStore.in.valid := 0 \n
+        tagStore.out.ready := 0 \n
+        dataStore.out.ready := 0
+    }"];
+    
+    WRITE_HIT [label="{ WRITE HIT |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 0 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 0 \n
+        dataStore.in.valid := 1 \n
+        dataStore.in.bits.isWrite := 1 \n
+        dataStore.in.bits.mask := 1.U \<\< tagMatch.io.idWay \n
+        tagStore.out.ready := 0 \n
+        dataStore.out.ready := 0
+    }"];
+    
+    WRITE_MISS [label="{ WRITE MISS |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 1 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 0 \n
+        dataStore.in.valid := 0 \n
+        tagStore.out.ready := 1 \n
+        dataStore.out.ready := 1
+    }"];
+
+    EVICT [label="{ EVICT |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 0 \n
+        out.dataOut.valid := 0 |
+        tagStore.in.valid := 1 \n
+        dataStore.in.valid := 1 \n
+        tagStore.in.bits.isWrite := 1 \n
+        dataStore.in.bits.isWrite := 1 \n
+        tagStore.in.bits.mask := 1.U \<\< in.evict.bits \n
+        dataStore.in.bits.mask := 1.U \<\< in.evict.bits \n
+        tagStore.out.ready := 0 \n
+        dataStore.out.ready := 0
+    }"];
+    
+    DONE [label="{ DONE |
+        in.req.ready := 0 \n
+        in.evict.ready := 0 \n
+        out.isHit.valid := 1 \n
+        out.dataOut.valid := 1 |
+        tagStore.in.valid := 0 \n
+        dataStore.in.valid := 0 \n
+        tagStore.out.ready := 1 \n
+        dataStore.out.ready := 1
+    }"];
+    
+    { rank=same; IDLE; READ; WRITE;}
+    { rank=same; WRITE_HIT; WRITE_MISS; EVICT;}
+    { rank=same; DONE;}
+
+    IDLE -> WRITE_HIT [style=invis];
+    READ -> WRITE_MISS [style=invis];
+    WRITE -> EVICT [style=invis];
+    WRITE_HIT -> DONE [style=invis];
+}

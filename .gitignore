@@ -343,3 +343,9 @@ hs_err_pid*
 .bloop/
 .scala-build/
 metals.sbt
+
+# Python files, folders, etc.
+.venv*/
+
+# MkDocs build folders
+site/

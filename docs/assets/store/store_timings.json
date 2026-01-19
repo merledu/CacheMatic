@@ -1,0 +1,25 @@
+{
+  "signal": [
+    {"name": "clock", "wave": "p............"},
+    {"name": "state", "wave": "22..2.22..22.", "data": ["Idle","Access","Done","Idle","Access","Valid","Idle"]},
+    {},
+    ["Input",
+      {"name": "ready", "wave": "10....10...1."},
+      {"name": "valid", "wave": "01.....0....1......0.....", "period": 0.5},
+      {"name": "addr", "wave": "x2.....x....=......x.....", "data": ["waddr", "raddr"], "period": 0.5},
+      {"name": "isWrite", "wave": "01.....0.................", "period": 0.5},
+      {"name": "mask", "wave": "x2.....x.................", "data": ["01"], "period": 0.5},
+      {"name": "dataIn", "wave": "x2.....x.................", "data": ["aa bb"], "period": 0.5},
+    ],
+    {},
+    ["Output",
+      {"name": "valid", "wave": "0......1....0...10.", "period": 0.5},
+      {"name": "ready", "wave": "0..........10.1..0.", "period": 0.5},
+      {"name": "dataOut", "wave": "x..........2x.", "data": ["00 bb"]},
+    ],
+  ],
+  // "config": { "hscale": 2 },
+  "head":{
+    "text": "Tag/Data Store Read-Write Timings",
+  }
+}

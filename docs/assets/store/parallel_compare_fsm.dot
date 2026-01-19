@@ -1,0 +1,55 @@
+digraph finite_state_machine {
+  rankdir=LR;
+
+  node [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#ECECFF",
+    color="#9370DB",
+    penwidth=2,
+    fontname="trebuchet ms",
+    fontsize=14,
+    fontcolor="#131300",
+    margin="0.1"
+  ];
+
+  edge [
+    color="#131300",
+    penwidth=2,
+    fontname="Arial",
+    fontsize=12,
+    fontcolor="#131300",
+    arrowsize=1,
+  ];
+
+  point [shape="point", width="0.1"]
+  point -> Idle;
+
+  Idle -> Idle;
+  Idle -> if_rw [label = "in.req.valid &&\n~in.evict.valid"];
+  Idle -> Evict [label = "in.req.valid &&\nin.evict.valid"];
+  if_rw [label="", shape="diamond", style="filled", height="0.4", width="0.4"]
+  if_rw -> Write [label = "in.req.bits.isWrite"];
+  if_rw -> Read [label = "~in.req.bits.isWrite"];
+
+  Write -> Write;
+  Write -> if_hit_w [label = "tagStore.out.valid"];
+  if_hit_w [label="", shape="diamond", style="filled", height="0.4", width="0.4"]
+  if_hit_w -> WriteMiss [label = "~tagMatch.io.isHit"];
+  if_hit_w -> WriteHit [label = "tagMatch.io.isHit"];
+
+  WriteMiss -> WriteMiss;
+  WriteMiss -> Evict [label = "in.evict.valid"];
+
+  Evict -> Evict;
+  Evict -> Done [label = "tagStore.out.valid &&\ndataStore.out.valid"];
+
+  WriteHit -> WriteHit;
+  WriteHit -> Done [label = "dataStore.out.valid"];
+
+  Read -> Read;
+  Read -> Done [label = "tagStore.out.valid &&\ndataStore.out.valid"];
+
+  Done -> Done;
+  Done -> Idle [label = "out.isHit.ready &&\nout.dataOut.ready"];
+}
